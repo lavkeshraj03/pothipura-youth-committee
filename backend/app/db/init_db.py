@@ -227,11 +227,11 @@ async def init_db():
 
             # 9. Initial Approved Expenses
             expenses_seed = [
-                (expense_categories[0], 35000.0, "मंदिर प्रांगण व मुख्य द्वार पर भव्य फूलों एवं गुब्बारों का शृंगार", comm_members[4], "श्री श्याम फ्लोरिस्ट", "CASH"),
-                (expense_categories[2], 28000.0, "साउंड सिस्टम, डिजिटल एल.ई.डी. वॉल एवं मुख्य स्टेज लाइटिंग अग्रिम", comm_members[3], "रॉयल साउंड एंड डीजे", "UPI"),
-                (expense_categories[3], 42000.0, "वाटरप्रूफ जर्मन हैंगर टेंट, कालीन व 1000 कुर्सियों की व्यवस्था", comm_members[0], "बालाजी टेंट हाउस", "BANK_TRANSFER"),
-                (expense_categories[6], 12500.0, "पूजा सामग्री, पंचामृत, हवन सामग्री व 108 दीपक", comm_members[4], "श्री कृष्ण पूजन भंडार", "CASH"),
-                (expense_categories[5], 6500.0, "महोत्सव आमंत्रण पत्रिका, बैनर एवं 20 बड़े होर्डिंग्स छपाई", comm_members[5], "महालक्ष्मी प्रिंटर्स", "UPI")
+                (expense_categories[0], 35000.0, "मंदिर प्रांगण व मुख्य द्वार पर भव्य फूलों एवं गुब्बारों का शृंगार", comm_members[0], "श्री श्याम फ्लोरिस्ट", "CASH"),
+                (expense_categories[2], 28000.0, "साउंड सिस्टम, डिजिटल एल.ई.डी. वॉल एवं मुख्य स्टेज लाइटिंग अग्रिम", comm_members[1], "रॉयल साउंड एंड डीजे", "UPI"),
+                (expense_categories[3], 42000.0, "वाटरप्रूफ जर्मन हैंगर टेंट, कालीन व 1000 कुर्सियों की व्यवस्था", comm_members[2], "बालाजी टेंट हाउस", "BANK_TRANSFER"),
+                (expense_categories[6], 12500.0, "पूजा सामग्री, पंचामृत, हवन सामग्री व 108 दीपक", comm_members[3], "श्री कृष्ण पूजन भंडार", "CASH"),
+                (expense_categories[5], 6500.0, "महोत्सव आमंत्रण पत्रिका, बैनर एवं 20 बड़े होर्डिंग्स छपाई", comm_members[0], "महालक्ष्मी प्रिंटर्स", "UPI")
             ]
             for cat, amt, desc, member, vendor, pay_m in expenses_seed:
                 db.add(Expense(
