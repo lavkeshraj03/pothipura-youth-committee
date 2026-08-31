@@ -1,0 +1,33 @@
+services:
+  # Python FastAPI Backend Web Service on Render
+  - type: web
+    name: pothipura-backend-api
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --app-dir backend
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENVIRONMENT
+        value: production
+
+  # Static Frontend Site on Render (Alternative / Combined)
+  - type: web
+    name: pothipura-frontend
+    env: static
+    region: singapore
+    plan: free
+    buildCommand: echo "Deploying static frontend"
+    staticPublishPath: backend/app/static/frontend
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

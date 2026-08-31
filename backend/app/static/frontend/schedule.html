@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>महोत्सव समय सारणी (Event Schedule) — ग्राम युवा समिति</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gotu&family=Rozha+One&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            vedic: {
+              gold: '#D97706',
+              lightgold: '#F59E0B',
+              night: '#040D1A',
+              card: '#071428',
+              border: '#B45309',
+            }
+          },
+          fontFamily: {
+            hindi: ['Gotu', 'sans-serif'],
+            festival: ['Rozha One', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #040D1A;
+      color: #E2E8F0;
+      font-family: 'Inter', sans-serif;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 30%, #F59E0B 70%, #D97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .vedic-card {
+      background: rgba(8, 23, 45, 0.88);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      backdrop-filter: blur(14px);
+      border-radius: 1.25rem;
+    }
+    .vedic-card:hover {
+      border-color: rgba(245, 158, 11, 0.6);
+      box-shadow: 0 10px 30px -10px rgba(217, 119, 6, 0.4);
+    }
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marquee 25s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+    .hero-slide {
+      transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printableReceiptArea, #printableReceiptArea * {
+        visibility: visible;
+      }
+      #printableReceiptArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        background: white !important;
+        color: black !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Top Auspicious Strip -->
+  <div class="bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-slate-950 text-xs font-bold py-1.5 px-4 text-center font-hindi tracking-wider flex items-center justify-center space-x-2 shadow-sm">
+    <span>🪷 ॐ नमो भगवते वासुदेवाय 🪷</span>
+    <span class="hidden md:inline">• श्री कृष्ण जन्माष्टमी महापर्व एवं ग्रामीण खेलकूद: 4 सितम्बर 2026 • समस्त ग्रामवासी सादर आमंत्रित हैं</span>
+  </div>
+
+  <!-- Sticky Navbar with Desktop Links & Mobile/Tablet Hamburger -->
+  <header class="sticky top-0 z-50 bg-[#061224]/95 backdrop-blur-xl border-b border-amber-500/30 shadow-xl shadow-black/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Logo -->
+        <a href="index.html" class="flex items-center space-x-3 group shrink-0">
+          <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 p-0.5 shadow-md shadow-amber-500/30 group-hover:scale-105 transition-transform flex items-center justify-center">
+            <div class="w-full h-full rounded-full bg-[#071428] flex items-center justify-center text-xl">
+              🦚
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xl font-black text-amber-400 font-hindi tracking-wide drop-shadow">
+                ग्राम युवा समिति
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 hidden sm:inline-block font-semibold">
+                4 सितम्बर 2026
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-medium hidden sm:block font-hindi">
+              श्री कृष्ण जन्मोत्सव एवं ग्रामीण खेलकूद
+            </p>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center space-x-1 font-hindi text-sm whitespace-nowrap">
+          <a href="index.html" class="px-3.5 py-2 rounded-xl font-bold text-amber-400 bg-amber-500/15 transition-colors">
+            मुख्य पृष्ठ
+          </a>
+          <a href="janmashtami.html" class="px-3.5 py-2 rounded-xl font-medium text-slate-200 hover:text-amber-300 hover:bg-slate-800/60 transition-colors flex items-center space-x-1.5">
+            <span>जन्माष्टमी 2026</span>
+          </a>
+          <a href="sports.html" class="px-3.5 py-2 rounded-xl font-medium text-slate-200 hover:text-amber-300 hover:bg-slate-800/60 transition-colors flex items-center space-x-1.5">
+            <span>🏆 खेलकूद (दंगल व कबड्डी)</span>
+          </a>
+          <a href="transparency.html" class="px-3.5 py-2 rounded-xl font-medium text-slate-200 hover:text-amber-300 hover:bg-slate-800/60 transition-colors">
+            वित्तीय पारदर्शिता
+          </a>
+
+          <!-- More Dropdown -->
+          <div class="relative group">
+            <button class="px-3.5 py-2 rounded-xl font-medium text-slate-200 hover:text-amber-300 hover:bg-slate-800/60 transition-colors flex items-center space-x-1 cursor-pointer">
+              <span>अधिक पृष्ठ ▾</span>
+            </button>
+            <div class="absolute right-0 top-full mt-1 w-56 bg-[#08172D] border border-amber-500/40 rounded-2xl shadow-2xl p-2 hidden group-hover:block backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+              <a href="schedule.html" class="flex items-center space-x-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-amber-300 hover:bg-amber-500/15 transition-all">
+                <i data-lucide="calendar" class="w-4 h-4 text-amber-400"></i>
+                <span>समय सारणी (Schedule)</span>
+              </a>
+              <a href="committee.html" class="flex items-center space-x-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-amber-300 hover:bg-amber-500/15 transition-all">
+                <i data-lucide="users" class="w-4 h-4 text-amber-400"></i>
+                <span>समिति पदाधिकारी (Members)</span>
+              </a>
+              <a href="donors.html" class="flex items-center space-x-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-amber-300 hover:bg-amber-500/15 transition-all">
+                <i data-lucide="heart" class="w-4 h-4 text-rose-400"></i>
+                <span>दानदाता सूची (Donors Wall)</span>
+              </a>
+              <a href="donate.html" class="flex items-center space-x-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-emerald-400 hover:bg-emerald-500/15 transition-all">
+                <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i>
+                <span>ऑनलाइन दान व रसीद (Donate)</span>
+              </a>
+              <a href="sports.html#register" class="flex items-center space-x-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-yellow-300 hover:bg-yellow-500/20 transition-all border-t border-slate-800 mt-1">
+                <i data-lucide="trophy" class="w-4 h-4 text-yellow-400"></i>
+                <span>खेलकूद पंजीकरण फॉर्म</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Right CTAs & Hamburger Toggle -->
+        <div class="flex items-center space-x-2.5 sm:space-x-3 shrink-0">
+          <a href="donate.html" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-500/25 hover:scale-105 transition-all flex items-center space-x-1.5 active:scale-95 border border-yellow-200 font-hindi">
+            <i data-lucide="heart" class="w-4 h-4 fill-slate-950"></i>
+            <span>दान करें (Donate)</span>
+          </a>
+          
+          <button id="navLoginBtn" onclick="openAuthModal()" class="px-3 sm:px-3.5 py-2 rounded-xl text-xs font-semibold text-amber-300 bg-slate-900/90 border border-amber-500/50 hover:bg-amber-500 hover:text-slate-950 transition-all cursor-pointer flex items-center space-x-1.5">
+            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+            <span id="navLoginText">पोर्टल लॉगिन</span>
+          </button>
+
+          <button onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-amber-400 hover:text-white transition-all cursor-pointer">
+            <i data-lucide="menu" class="w-5 h-5" id="menuIcon"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-[#07152B] border-b-2 border-amber-500/40 px-4 py-4 space-y-2 font-hindi text-sm animate-in slide-in-from-top duration-200 shadow-2xl">
+      <a href="index.html" class="block px-3.5 py-2.5 rounded-xl font-bold text-amber-400 bg-amber-500/20">
+        🏠 मुख्य पृष्ठ
+      </a>
+      <a href="janmashtami.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-200 hover:bg-slate-800">
+        🪷 जन्माष्टमी महोत्सव 2026
+      </a>
+      <a href="sports.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-200 hover:bg-slate-800">
+        🏆 खेलकूद (दंगल व कबड्डी)
+      </a>
+      <a href="transparency.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-200 hover:bg-slate-800">
+        🛡️ 100% वित्तीय पारदर्शिता
+      </a>
+      
+      <div class="border-t border-slate-800 pt-2 grid grid-cols-2 gap-2 text-xs">
+        <a href="schedule.html" class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-amber-300 font-semibold block text-center">
+          📅 समय सारणी
+        </a>
+        <a href="committee.html" class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-amber-300 font-semibold block text-center">
+          👥 समिति पदाधिकारी
+        </a>
+        <a href="donors.html" class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-rose-300 font-semibold block text-center">
+          💖 दानदाता सूची
+        </a>
+        <a href="donate.html" class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-emerald-300 font-semibold block text-center">
+          🧾 ऑनलाइन दान व रसीद
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dynamic Live Notice Ticker -->
+  <div id="liveTickerBar" class="bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-slate-950 py-2.5 px-4 shadow-md border-b border-yellow-300/40 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto flex items-center space-x-3 text-xs sm:text-sm font-bold font-hindi">
+      <div class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-slate-950 text-amber-300 shrink-0 shadow-sm">
+        <i data-lucide="megaphone" class="w-3.5 h-3.5 text-amber-400 animate-bounce"></i>
+        <span>घोषणा:</span>
+      </div>
+      <div class="overflow-hidden whitespace-nowrap w-full">
+        <div class="inline-block animate-marquee" id="dynamicTickerText">
+          <span class="mr-12 text-slate-950 font-black">🪷 4 सितम्बर 2026: दिन में 10:00 AM से भव्य कुश्ती दंगल व कबड्डी प्रतियोगिता एवं रात्रि में 25 फीट मटकी फोड़ व भजन संध्या। •</span>
+          <span class="mr-12 text-slate-950 font-black">🏆 खेलकूद विजेता पुरस्कार: प्रथम ₹21,000 + गदा, द्वितीय ₹11,000। खिलाड़ी पंजीयन चालू। •</span>
+          <span class="mr-12 text-slate-950 font-black">🛡️ शत-प्रतिशत पारदर्शिता: प्रत्येक दान की डिजिटल पावती रसीद तुरंत प्राप्त करें। •</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold mb-3 font-hindi">
+          <i data-lucide="calendar" class="w-4 h-4 text-amber-400"></i>
+          <span>4 सितम्बर 2026 • 24 घंटे का विस्तृत कार्यक्रम</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black text-white font-festival leading-tight">
+          महोत्सव समय सारणी (Timeline)
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300 font-hindi mt-2 leading-relaxed">
+          प्रातः मंगला आरती से लेकर मध्यरात्रि जन्मोत्सव तक आयोजित होने वाले समस्त धार्मिक, खेलकूद एवं सांस्कृतिक कार्यक्रमों का समय चक्र।
+        </p>
+      </div>
+
+      <!-- Schedule Timeline Cards -->
+      <div class="max-w-3xl mx-auto space-y-4 font-hindi">
+        
+        <div class="vedic-card p-5 border-amber-500/40 flex items-start space-x-4">
+          <div class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 font-black text-xs shrink-0 font-mono text-center">
+            06:00<br>AM
+          </div>
+          <div>
+            <h4 class="text-base font-bold text-white">मंगला आरती एवं प्रभातफेरी</h4>
+            <p class="text-xs text-slate-300 mt-1">स्थान: श्री राधा कृष्ण मंदिर • समस्त ग्रामवासियों द्वारा प्रभातफेरी व कीर्तन</p>
+          </div>
+        </div>
+
+        <div class="vedic-card p-5 border-amber-500/40 flex items-start space-x-4">
+          <div class="px-3 py-2 rounded-xl bg-yellow-500 text-slate-950 font-black text-xs shrink-0 font-mono text-center">
+            10:00<br>AM
+          </div>
+          <div>
+            <h4 class="text-base font-bold text-white">विशाल कुश्ती दंगल का शुभारंभ</h4>
+            <p class="text-xs text-slate-300 mt-1">स्थान: ग्राम अखाड़ा • अखाड़ा पूजन, पहलवान भार मापन व प्रथम चरण मुकाबले</p>
+          </div>
+        </div>
+
+        <div class="vedic-card p-5 border-amber-500/40 flex items-start space-x-4">
+          <div class="px-3 py-2 rounded-xl bg-blue-500 text-slate-950 font-black text-xs shrink-0 font-mono text-center">
+            01:00<br>PM
+          </div>
+          <div>
+            <h4 class="text-base font-bold text-white">कबड्डी महासंग्राम (16 टीम नॉकआउट)</h4>
+            <p class="text-xs text-slate-300 mt-1">स्थान: खेल मैदान • लीग व सेमीफाइनल मुकाबले</p>
+          </div>
+        </div>
+
+        <div class="vedic-card p-5 border-amber-500/40 flex items-start space-x-4">
+          <div class="px-3 py-2 rounded-xl bg-rose-500 text-white font-black text-xs shrink-0 font-mono text-center">
+            07:00<br>PM
+          </div>
+          <div>
+            <h4 class="text-base font-bold text-white">भव्य भजन संध्या एवं श्याम संकीर्तन</h4>
+            <p class="text-xs text-slate-300 mt-1">स्थान: मुख्य पांडाल • प्रसिद्ध भजन गायकों द्वारा अमृत वर्षा एवं रासलीला मंचन</p>
+          </div>
+        </div>
+
+        <div class="vedic-card p-5 border-amber-500/40 flex items-start space-x-4">
+          <div class="px-3 py-2 rounded-xl bg-yellow-400 text-slate-950 font-black text-xs shrink-0 font-mono text-center">
+            10:30<br>PM
+          </div>
+          <div>
+            <h4 class="text-base font-bold text-white">रोमांचकारी 25 फीट मटकी फोड़ स्पर्धा</h4>
+            <p class="text-xs text-slate-300 mt-1">स्थान: मंदिर चौक • 8 युवा मंडलों के बीच हांडी फोड़ने का महामुकाबला</p>
+          </div>
+        </div>
+
+        <div class="vedic-card p-5 border-emerald-500 border-2 flex items-start space-x-4 bg-gradient-to-r from-[#0A2244] to-[#071428]">
+          <div class="px-3 py-2 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs shrink-0 font-mono text-center">
+            12:00<br>AM
+          </div>
+          <div>
+            <h4 class="text-base font-bold text-white">भगवान श्री कृष्ण का जन्मोत्सव, 108 दीप महाआरती व 56 भोग</h4>
+            <p class="text-xs text-slate-300 mt-1">स्थान: गर्भगृह • 108 दीपकों से दिव्य आरती, 56 भोग दर्शन व 1500 पैकेट पंजीरी प्रसाद वितरण</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+    
+  <!-- Footer -->
+  <footer class="bg-[#040B17] border-t-2 border-amber-500/40 text-slate-300 pt-12 pb-8 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-center md:text-left">
+        <div>
+          <div class="flex items-center justify-center md:justify-start space-x-2 mb-3">
+            <span class="text-2xl">🦚</span>
+            <span class="text-xl font-bold text-amber-400 font-hindi">ग्राम युवा समिति</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed font-hindi">
+            समस्त ग्रामवासियों के सहयोग से संचालित सामाजिक, सांस्कृतिक, धार्मिक एवं खेलकूद उन्नयन का समर्पित मंच।
+          </p>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-amber-400 mb-2 font-hindi">महत्वपूर्ण पृष्ठ</h4>
+          <ul class="space-y-1.5 text-xs text-slate-300 font-hindi">
+            <li><a href="janmashtami.html" class="hover:text-amber-400">श्री कृष्ण जन्माष्टमी महोत्सव 2026</a></li>
+            <li><a href="sports.html" class="hover:text-amber-400">कुश्ती दंगल एवं कबड्डी महासंग्राम</a></li>
+            <li><a href="transparency.html" class="hover:text-amber-400">100% सत्यापित वित्तीय पारदर्शिता</a></li>
+            <li><a href="schedule.html" class="hover:text-amber-400">महोत्सव समय सारणी</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-amber-400 mb-2 font-hindi">दान एवं सहभागिता (Donations)</h4>
+          <ul class="space-y-1.5 text-xs text-slate-300 font-hindi">
+            <li><a href="donate.html" class="hover:text-amber-400">ऑनलाइन दान व रसीद (Donate)</a></li>
+            <li><a href="donors.html" class="hover:text-amber-400">सम्मानित दानदाता सूची (Donor Wall)</a></li>
+            <li><a href="committee.html" class="hover:text-amber-400">समिति पदाधिकारी मंडल</a></li>
+            <li><a href="sports.html#register" class="hover:text-amber-400">खिलाड़ी पंजीकरण फॉर्म</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-amber-400 mb-2 font-hindi">समिति संपर्क केंद्र</h4>
+          <p class="text-xs text-slate-300 font-hindi">स्थान: श्री राधा कृष्ण मंदिर प्रांगण, ग्राम चौक</p>
+          <p class="text-xs text-slate-300 mt-1">फोन: +91 98290 12345 / 98290 45678</p>
+          <p class="text-xs text-slate-300 mt-1">ईमेल: contact@villageyouth.org</p>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800 pt-6 text-center text-xs text-slate-500 font-hindi">
+        © 2026 ग्राम युवा समिति (Village Youth Committee). समस्त अधिकार सुरक्षित।
+      </div>
+    </div>
+  </footer>
+
+  <!-- AUTHENTICATION & ROLE-BASED DASHBOARD MODAL -->
+  <div id="authModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    
+    <!-- 1. Login Form -->
+    <div id="loginView" class="vedic-card max-w-md w-full p-6 sm:p-8 relative border-2 border-amber-500 shadow-2xl">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold cursor-pointer">&times;</button>
+      
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400 text-amber-400 flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg">🔐</div>
+        <h3 class="text-2xl font-black text-white font-hindi">समिति पोर्टल लॉगिन</h3>
+        <p class="text-xs text-slate-400 font-hindi mt-1">सुपर एडमिन अथवा समिति सदस्य के रूप में लॉगिन करें</p>
+      </div>
+
+      <form onsubmit="handleAuthLogin(event)" class="space-y-4 font-hindi">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">ईमेल या यूजरनेम (Username / Email)</label>
+          <input type="text" id="adminUsername" value="admin@villageyouth.org" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:border-amber-500 focus:outline-none" required />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">पासवर्ड (Password)</label>
+          <input type="password" id="adminPassword" value="Admin@123" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:border-amber-500 focus:outline-none font-mono" required />
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 font-black text-sm transition-all shadow-xl hover:scale-[1.02] cursor-pointer">
+          लॉगिन करें (Sign In)
+        </button>
+
+        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-1 font-mono">
+          <div class="text-amber-400 font-bold">टेस्ट क्रेडेंशियल्स:</div>
+          <div>👑 <b>सुपर एडमिन</b>: admin@villageyouth.org / Admin@123</div>
+          <div>👥 <b>समिति सदस्य</b>: member@villageyouth.org / Member@123</div>
+        </div>
+      </form>
+    </div>
+
+    <!-- 2. SUPER ADMIN CONTROL CENTER (Full Master Rights + Verification + Spends Form + Live Announcement) -->
+    <div id="superAdminView" class="vedic-card max-w-5xl w-full p-6 sm:p-8 relative border-2 border-amber-500 shadow-2xl hidden max-h-[90vh] overflow-y-auto font-hindi">
+      
+      <!-- Top Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-amber-500/30 pb-4 mb-6 gap-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-2xl shadow-lg shrink-0">
+            👑
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 class="text-xl sm:text-2xl font-black text-white">सुपर एडमिन नियंत्रण कक्ष</h3>
+              <span class="px-2 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-black uppercase tracking-wider">Super Admin</span>
+            </div>
+            <p class="text-xs text-emerald-400 mt-0.5 font-semibold">✓ प्रत्यक्ष दान संग्रह, सत्यापन, खर्च अनुमोदन व तत्काल घोषणा प्रबंधन</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-2 self-end sm:self-auto">
+          <button onclick="handleLogout()" class="px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-bold hover:bg-red-600 hover:text-white transition-all cursor-pointer">
+            लॉगआउट
+          </button>
+          <button onclick="closeAuthModal()" class="text-slate-400 hover:text-white text-2xl font-bold px-2 cursor-pointer">&times;</button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-3 mb-6 text-xs font-bold">
+        <button onclick="switchAdminTab('memberCollect')" id="btnTab-memberCollect" class="px-4 py-2.5 rounded-xl bg-emerald-600 text-white shadow-md transition-all cursor-pointer flex items-center space-x-1.5">
+          <i data-lucide="hand-coins" class="w-4 h-4"></i>
+          <span>+ प्रत्यक्ष दान संग्रह (Auto-Verified)</span>
+        </button>
+        <button onclick="switchAdminTab('verifyQueue')" id="btnTab-verifyQueue" class="px-4 py-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5">
+          <i data-lucide="check-circle" class="w-4 h-4 text-amber-400"></i>
+          <span>ऑनलाइन भुगतान सत्यापन (<span id="pendingCount">2</span>)</span>
+        </button>
+        <button onclick="switchAdminTab('announcementMgr')" id="btnTab-announcementMgr" class="px-4 py-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5">
+          <i data-lucide="megaphone" class="w-4 h-4 text-yellow-400"></i>
+          <span>📢 तत्काल घोषणा प्रबंधक</span>
+        </button>
+        <button onclick="switchAdminTab('expenseManager')" id="btnTab-expenseManager" class="px-4 py-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5">
+          <i data-lucide="wallet" class="w-4 h-4 text-rose-400"></i>
+          <span>खर्च दर्ज व अनुमोदन (Super Admin Only)</span>
+        </button>
+        <button onclick="switchAdminTab('memberRoles')" id="btnTab-memberRoles" class="px-4 py-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5">
+          <i data-lucide="user-plus" class="w-4 h-4 text-blue-400"></i>
+          <span>सदस्य क्रेडेंशियल्स</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: Member / Admin Direct Donation Collection (AUTO-VERIFIED, NO APPROVAL NEEDED) -->
+      <div id="section-memberCollect" class="space-y-4">
+        <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-xs text-emerald-200">
+          ✓ <b>प्रत्यक्ष दान संग्रह (Direct Door-to-Door / Counter Collection):</b> समिति सदस्य या एडमिन द्वारा संग्रह किया गया दान <b>स्वतः सत्यापित (Auto-Verified)</b> हो जाता है तथा तुरंत आधिकारिक पावती रसीद मुद्रित की जा सकती है।
+        </div>
+
+        <form onsubmit="handleDirectMemberDonation(event)" class="p-5 rounded-2xl bg-slate-900 border border-emerald-500/30 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-bold text-slate-200 mb-1">दानदाता का नाम (Donor Name) *</label>
+            <input type="text" id="dirDonorName" required placeholder="उदा. रामनिवास जांगिड़" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:border-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-200 mb-1">दान राशि (Amount in ₹) *</label>
+            <input type="number" id="dirDonorAmt" required placeholder="उदा. 5100" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:border-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-200 mb-1">मोबाइल नंबर (Mobile No.)</label>
+            <input type="tel" id="dirDonorPhone" placeholder="10 अंकों का नंबर" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:border-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-200 mb-1">भुगतान माध्यम (Mode)</label>
+            <select id="dirDonorMode" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:border-emerald-500 focus:outline-none">
+              <option>नकद (Cash Received by Member)</option>
+              <option>प्रत्यक्ष UPI (Direct Member QR)</option>
+              <option>बैंक चेक / ड्राफ्ट (Cheque)</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black text-xs sm:text-sm shadow-xl hover:scale-[1.01] transition-all cursor-pointer">
+              ✓ दान दर्ज करें, सत्यापित करें एवं अधिकृत रसीद जारी करें (Auto-Verified)
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab 2: Verification Queue for Online Submissions -->
+      <div id="section-verifyQueue" class="space-y-4 hidden">
+        <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 flex items-center justify-between">
+          <span>⚠️ ऑनलाइन फॉर्म से प्राप्त UTR का सत्यापन करें। केवल सत्यापित होने के बाद ही यह दानदाता सूची व हीरो सेक्शन में प्रदर्शित होगा।</span>
+          <span class="font-mono font-bold text-amber-400">सत्यापन कतार</span>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-slate-800">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-900/90 text-amber-300 border-b border-slate-800">
+              <tr>
+                <th class="p-3">दानदाता</th>
+                <th class="p-3">मोबाइल</th>
+                <th class="p-3">राशि</th>
+                <th class="p-3">UTR संख्या</th>
+                <th class="p-3 text-right">सत्यापन कार्यवाही</th>
+              </tr>
+            </thead>
+            <tbody id="pendingVerificationTable" class="divide-y divide-slate-800 text-slate-200">
+              <tr id="row-pending-1">
+                <td class="p-3 font-bold">विक्रम सिंह राठौड़</td>
+                <td class="p-3 font-mono text-slate-300">+91 98290 88776</td>
+                <td class="p-3 font-mono font-black text-emerald-400">₹11,000</td>
+                <td class="p-3 font-mono text-yellow-300 bg-slate-950/60 px-2 py-1 rounded">423589912041</td>
+                <td class="p-3 text-right space-x-1.5">
+                  <button onclick="approveDonation('row-pending-1', 'विक्रम सिंह राठौड़', 11000, '423589912041')" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow cursor-pointer">
+                    ✓ सत्यापित करें व रसीद बनाएं
+                  </button>
+                  <button onclick="rejectDonation('row-pending-1')" class="px-2.5 py-1.5 rounded-lg bg-red-600/20 border border-red-500/40 text-red-300 hover:bg-red-600 hover:text-white font-bold text-xs cursor-pointer">
+                    ✕ निरस्त करें
+                  </button>
+                </td>
+              </tr>
+              <tr id="row-pending-2">
+                <td class="p-3 font-bold">गोपाल कृष्ण पारीक</td>
+                <td class="p-3 font-mono text-slate-300">+91 94140 12890</td>
+                <td class="p-3 font-mono font-black text-emerald-400">₹5,100</td>
+                <td class="p-3 font-mono text-yellow-300 bg-slate-950/60 px-2 py-1 rounded">423577189023</td>
+                <td class="p-3 text-right space-x-1.5">
+                  <button onclick="approveDonation('row-pending-2', 'गोपाल कृष्ण पारीक', 5100, '423577189023')" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow cursor-pointer">
+                    ✓ सत्यापित करें व रसीद बनाएं
+                  </button>
+                  <button onclick="rejectDonation('row-pending-2')" class="px-2.5 py-1.5 rounded-lg bg-red-600/20 border border-red-500/40 text-red-300 hover:bg-red-600 hover:text-white font-bold text-xs cursor-pointer">
+                    ✕ निरस्त करें
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 3: Live Instant Announcement Manager (Editable immediately) -->
+      <div id="section-announcementMgr" class="space-y-4 hidden">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-yellow-500/40 space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-yellow-400 flex items-center space-x-2">
+              <i data-lucide="megaphone" class="w-4 h-4"></i>
+              <span>लाइव सूचना / घोषणा तत्काल बदलें (Live Notice Ticker)</span>
+            </h4>
+            <span class="text-[11px] text-slate-400 font-mono">तुरंत प्रभाव से लाइव</span>
+          </div>
+
+          <form onsubmit="handleUpdateAnnouncement(event)" class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-300 mb-1">घोषणा संदेश (Announcement Text)</label>
+              <textarea id="announcementText" rows="3" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-hindi focus:border-yellow-400 focus:outline-none" required>🪷 4 सितम्बर 2026: दिन में 10:00 AM से भव्य कुश्ती दंगल व कबड्डी प्रतियोगिता एवं रात्रि में 25 फीट मटकी फोड़ व भजन संध्या। • 🏆 खेलकूद विजेता पुरस्कार: प्रथम ₹21,000 + गदा, द्वितीय ₹11,000। पंजीकरण चालू। • 🛡️ शत-प्रतिशत पारदर्शिता: प्रत्येक दान की डिजिटल पावती रसीद तुरंत प्राप्त करें।</textarea>
+            </div>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 text-slate-950 font-black text-xs shadow-lg hover:scale-105 transition-all cursor-pointer">
+              📢 तुरंत घोषणा अपडेट करें (Publish Live Announcement)
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tab 4: Expense Management & Spend Form (STRICTLY SUPER ADMIN ONLY) -->
+      <div id="section-expenseManager" class="space-y-6 hidden">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-rose-500/40 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h4 class="text-sm font-bold text-rose-400 flex items-center space-x-2">
+              <i data-lucide="wallet" class="w-4 h-4"></i>
+              <span>नया महोत्सव खर्च दर्ज करें (Spend / Expense Form — Super Admin Only)</span>
+            </h4>
+            <span class="px-2 py-0.5 rounded bg-rose-600/30 text-rose-300 text-[10px] font-bold">अधिकृत</span>
+          </div>
+
+          <form onsubmit="handleAddNewExpense(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label class="block text-slate-300 font-bold mb-1">मद / व्यय शीर्षक (Expense Head) *</label>
+              <input type="text" id="expHead" required placeholder="उदा. 25 फीट मटकी, क्रेन व सुरक्षा रस्से" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-rose-500 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-slate-300 font-bold mb-1">व्यय राशि (Amount in ₹) *</label>
+              <input type="number" id="expAmt" required placeholder="उदा. 15000" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono focus:border-rose-500 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-slate-300 font-bold mb-1">भुगतान प्राप्तकर्ता / फर्म का नाम *</label>
+              <input type="text" id="expVendor" required placeholder="उदा. बजरंग क्रेन सर्विस" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-rose-500 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-slate-300 font-bold mb-1">बिल / वाउचर सं. (Bill / Voucher No.)</label>
+              <input type="text" id="expBillNo" placeholder="उदा. BILL-509" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono focus:border-rose-500 focus:outline-none" />
+            </div>
+            <div class="sm:col-span-2">
+              <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white font-bold text-xs shadow-lg hover:brightness-110 cursor-pointer">
+                ✓ खर्च अनुमोदित करें एवं वित्तीय बहीखाते में दर्ज करें
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-slate-800">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-900 text-amber-300 border-b border-slate-800">
+              <tr>
+                <th class="p-3">मद (Expense Head)</th>
+                <th class="p-3">फर्म / आपूर्तिकर्ता</th>
+                <th class="p-3">स्वीकृत राशि</th>
+                <th class="p-3">बिल सं.</th>
+                <th class="p-3">अनुमोदक</th>
+              </tr>
+            </thead>
+            <tbody id="approvedExpensesTable" class="divide-y divide-slate-800 text-slate-200">
+              <tr>
+                <td class="p-3 font-bold">टेंट एवं भव्य वाटरप्रूफ पांडाल</td>
+                <td class="p-3">श्री श्याम टेंट हाउस</td>
+                <td class="p-3 font-mono font-bold text-rose-400">₹45,000</td>
+                <td class="p-3 font-mono text-slate-400">BILL-402</td>
+                <td class="p-3 text-emerald-400 font-bold">सुरेश कुमार (अध्यक्ष)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">लाइव डिजिटल साउंड व 108 दीप लाइटिंग</td>
+                <td class="p-3">बालाजी डीजे एंड साउंड्स</td>
+                <td class="p-3 font-mono font-bold text-rose-400">₹35,000</td>
+                <td class="p-3 font-mono text-slate-400">BILL-118</td>
+                <td class="p-3 text-emerald-400 font-bold">महेश अग्रवाल (कोषाध्यक्ष)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">माखन, मिश्री, 56 भोग व 1500 पैकेट प्रसाद</td>
+                <td class="p-3">कन्हैया मिष्ठान भंडार</td>
+                <td class="p-3 font-mono font-bold text-rose-400">₹24,000</td>
+                <td class="p-3 font-mono text-slate-400">BILL-905</td>
+                <td class="p-3 text-emerald-400 font-bold">सुरेश कुमार (अध्यक्ष)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 5: Member Roles -->
+      <div id="section-memberRoles" class="space-y-4 hidden">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-amber-500/30 space-y-3 text-xs">
+          <h4 class="text-sm font-bold text-amber-400">नया समिति सदस्य क्रेडेंशियल बनाएं</h4>
+          <form onsubmit="handleCreateMember(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input type="text" id="newMemName" required placeholder="सदस्य का नाम (Full Name)" class="px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white" />
+            <input type="email" id="newMemEmail" required placeholder="member@villageyouth.org" class="px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono" />
+            <select id="newMemRole" class="px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white">
+              <option value="sports">खेलकूद व दंगल संयोजक</option>
+              <option value="cultural">सांस्कृतिक व भजन प्रभारी</option>
+              <option value="finance">सह-कोषाध्यक्ष (Donation Collector)</option>
+            </select>
+            <button type="submit" class="py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold cursor-pointer">
+              ✓ क्रेडेंशियल बनाएं व अनुमति दें
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3. COMMITTEE MEMBER PORTAL (With Direct Donation Collection + Assigned Tasks) -->
+    <div id="memberPortalView" class="vedic-card max-w-4xl w-full p-6 sm:p-8 relative border-2 border-blue-500 shadow-2xl hidden max-h-[90vh] overflow-y-auto font-hindi">
+      <div class="flex items-center justify-between border-b border-blue-500/30 pb-4 mb-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-2xl shadow shrink-0">
+            👥
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 class="text-xl font-black text-white" id="memPortalName">समिति सदस्य कार्यक्षेत्र</h3>
+              <span class="px-2 py-0.5 rounded-full bg-blue-600/30 border border-blue-400 text-blue-300 text-[10px] font-bold">Member Access</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">भूमिका: प्रत्यक्ष दान संग्रह एवं खेलकूद/सांस्कृतिक व्यवस्था</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="handleLogout()" class="px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-bold hover:bg-red-600 hover:text-white transition-all cursor-pointer">
+            लॉगआउट
+          </button>
+          <button onclick="closeAuthModal()" class="text-slate-400 hover:text-white text-2xl font-bold px-2 cursor-pointer">&times;</button>
+        </div>
+      </div>
+
+      <!-- Member Actions: Direct Donation Collection -->
+      <div class="space-y-6">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-emerald-500/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-emerald-400 flex items-center space-x-1.5">
+              <i data-lucide="hand-coins" class="w-4 h-4"></i>
+              <span>प्रत्यक्ष दान संग्रह फॉर्म (No Verification Needed — Auto Verified)</span>
+            </h4>
+            <span class="text-[10px] text-emerald-300 px-2 py-0.5 bg-emerald-500/20 rounded font-bold">अधिकृत सदस्य संग्रह</span>
+          </div>
+
+          <form onsubmit="handleDirectMemberDonation(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <input type="text" id="memDirName" required placeholder="दानदाता का नाम (Donor Name) *" class="px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white" />
+            <input type="number" id="memDirAmt" required placeholder="दान राशि (₹) *" class="px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono" />
+            <input type="tel" id="memDirPhone" placeholder="मोबाइल नंबर (10 अंक)" class="px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono" />
+            <select id="memDirMode" class="px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white">
+              <option>नकद (Cash Handed over to Member)</option>
+              <option>UPI / PhonePe</option>
+            </select>
+            <div class="sm:col-span-2">
+              <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-bold text-xs shadow-lg cursor-pointer">
+                ✓ दान संग्रह दर्ज करें एवं रसीद प्रिंट करें (Auto-Verified)
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+            <div class="text-xs text-slate-400">कुल पंजीकृत कुश्ती पहलवान</div>
+            <div class="text-2xl font-black text-amber-400 mt-1 font-mono">48 पहलवान</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+            <div class="text-xs text-slate-400">कबड्डी टीमें</div>
+            <div class="text-2xl font-black text-blue-400 mt-1 font-mono">16 टीमें</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+            <div class="text-xs text-slate-400">मटकी फोड़ मंडल</div>
+            <div class="text-2xl font-black text-emerald-400 mt-1 font-mono">8 युवा मंडल</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- THEMATIC OFFICIAL VEDIC RECEIPT MODAL -->
+  <div id="receiptModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="max-w-2xl w-full relative">
+      <button onclick="closeReceiptModal()" class="absolute -top-10 right-0 text-white text-2xl font-bold hover:text-amber-400 cursor-pointer">&times; बंद करें</button>
+      
+      <div id="printableReceiptArea" class="bg-gradient-to-b from-[#FFFDF5] to-[#FFF9E6] text-slate-950 p-6 sm:p-8 rounded-3xl border-4 border-amber-600 shadow-2xl font-hindi relative overflow-hidden">
+        
+        <div class="border-b-2 border-amber-600/40 pb-4 text-center relative">
+          <div class="text-xs font-black text-amber-800 tracking-widest uppercase">🪷 ॐ श्री कृष्णाय नमः 🪷</div>
+          <div class="text-2xl sm:text-3xl font-black text-amber-900 mt-1 font-festival">ग्राम युवा समिति (पंजीकृत)</div>
+          <p class="text-xs font-semibold text-slate-700">श्री कृष्ण जन्माष्टमी महापर्व एवं ग्रामीण खेलकूद महोत्सव 2026</p>
+          <p class="text-[11px] text-slate-600">स्थान: श्री राधा कृष्ण मंदिर प्रांगण, ग्राम चौक • फोन: +91 98290 12345</p>
+
+          <div class="inline-block mt-2 px-4 py-1 rounded-full bg-amber-600 text-white text-xs font-black tracking-wider shadow">
+            आधिकारिक दान पावती रसीद (OFFICIAL DONATION RECEIPT)
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 my-4 text-xs">
+          <div>
+            <span class="text-slate-600">रसीद संख्या (Receipt No):</span>
+            <span class="font-mono font-black text-amber-900 block text-sm" id="recSlipNo">GYS-REC-2026-001</span>
+          </div>
+          <div class="text-right">
+            <span class="text-slate-600">दिनांक (Date):</span>
+            <span class="font-mono font-bold text-slate-900 block" id="recSlipDate">31-08-2026</span>
+          </div>
+        </div>
+
+        <div class="space-y-3 bg-amber-50/80 p-4 rounded-2xl border border-amber-300 text-xs sm:text-sm">
+          <div class="flex justify-between border-b border-amber-200/80 pb-2">
+            <span class="text-slate-700">सम्मानित दानदाता का नाम:</span>
+            <span class="font-black text-slate-950" id="recSlipDonorName">चौधरी हनुमान राम जी</span>
+          </div>
+          <div class="flex justify-between border-b border-amber-200/80 pb-2">
+            <span class="text-slate-700">दान समर्पित राशि:</span>
+            <span class="font-black text-emerald-800 text-base sm:text-lg font-mono" id="recSlipAmount">₹51,000</span>
+          </div>
+          <div class="flex justify-between border-b border-amber-200/80 pb-2">
+            <span class="text-slate-700">संग्रहकर्ता / माध्यम:</span>
+            <span class="font-bold text-slate-800" id="recSlipCollector">समिति कोषाध्यक्ष मंडल</span>
+          </div>
+          <div class="flex justify-between border-b border-amber-200/80 pb-2">
+            <span class="text-slate-700">भुगतान संदर्भ व UTR:</span>
+            <span class="font-mono font-bold text-slate-900" id="recSlipUTR">UPI Ref: 423100918234</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-700">प्रयोजन (Purpose):</span>
+            <span class="font-bold text-amber-900">श्री कृष्ण जन्माष्टमी जन्मोत्सव, मटकी फोड़ व महाप्रसाद</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 items-end pt-6 mt-4 border-t-2 border-dashed border-amber-300 text-center text-xs">
+          <div>
+            <div class="w-16 h-16 rounded-full border-2 border-emerald-700 text-emerald-800 font-bold text-[9px] flex items-center justify-center mx-auto leading-tight p-1 bg-emerald-50 shadow-sm">
+              ✓ शत-प्रतिशत सत्यापित कोष
+            </div>
+            <p class="text-[10px] text-slate-600 mt-1">डिजिटल सत्यापन</p>
+          </div>
+
+          <div>
+            <div class="font-black text-amber-900 text-sm font-hindi">महेश अग्रवाल</div>
+            <div class="border-t border-slate-900 mt-1 pt-0.5 text-[10px] font-bold text-slate-700">हस्ताक्षर कोषाध्यक्ष</div>
+          </div>
+
+          <div>
+            <div class="font-black text-amber-900 text-sm font-hindi">सुरेश कुमार</div>
+            <div class="border-t border-slate-900 mt-1 pt-0.5 text-[10px] font-bold text-slate-700">हस्ताक्षर अध्यक्ष</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex items-center justify-center space-x-3 mt-4">
+        <button onclick="window.print()" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-2xl flex items-center space-x-2 cursor-pointer font-hindi">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          <span>रसीद प्रिंट / PDF डाउनलोड करें</span>
+        </button>
+        <button onclick="closeReceiptModal()" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer font-hindi">
+          बंद करें
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Mobile Drawer Toggle
+    function toggleMobileMenu() {
+      const m = document.getElementById("mobileMenu");
+      m.classList.toggle("hidden");
+    }
+
+    // Dynamic Announcement Manager
+    const savedAnnouncement = localStorage.getItem("gys_live_announcement");
+    if (savedAnnouncement) {
+      const el = document.getElementById("dynamicTickerText");
+      if (el) el.innerHTML = `<span class="mr-12 text-slate-950 font-black">${savedAnnouncement}</span>`;
+      const txtArea = document.getElementById("announcementText");
+      if (txtArea) txtArea.value = savedAnnouncement;
+    }
+
+    function handleUpdateAnnouncement(e) {
+      e.preventDefault();
+      const txt = document.getElementById("announcementText").value.trim();
+      localStorage.setItem("gys_live_announcement", txt);
+      const el = document.getElementById("dynamicTickerText");
+      if (el) el.innerHTML = `<span class="mr-12 text-slate-950 font-black">${txt}</span>`;
+      alert("✓ नई घोषणा तुरंत लाइव अपडेट कर दी गई है!");
+    }
+
+    // Role-based auth management
+    let currentUser = JSON.parse(localStorage.getItem("gys_user_session") || "null");
+    updateNavAuthState();
+
+    function openAuthModal() {
+      const modal = document.getElementById("authModal");
+      const loginView = document.getElementById("loginView");
+      const superView = document.getElementById("superAdminView");
+      const memView = document.getElementById("memberPortalView");
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+
+      if (currentUser && currentUser.role === "superadmin") {
+        loginView.classList.add("hidden");
+        superView.classList.remove("hidden");
+        memView.classList.add("hidden");
+      } else if (currentUser && currentUser.role === "member") {
+        loginView.classList.add("hidden");
+        superView.classList.add("hidden");
+        memView.classList.remove("hidden");
+        document.getElementById("memPortalName").innerText = currentUser.name + " (सदस्य कार्यक्षेत्र)";
+      } else {
+        loginView.classList.remove("hidden");
+        superView.classList.add("hidden");
+        memView.classList.add("hidden");
+      }
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById("authModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    function handleAuthLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById("adminUsername").value.trim();
+      if (u === "admin@villageyouth.org" || u === "admin") {
+        currentUser = { name: "श्री सुरेश कुमार (अध्यक्ष)", role: "superadmin", email: u };
+      } else {
+        currentUser = { name: u.split("@")[0] || "समिति सदस्य", role: "member", email: u };
+      }
+
+      localStorage.setItem("gys_user_session", JSON.stringify(currentUser));
+      updateNavAuthState();
+      confetti({ particleCount: 80, spread: 60, origin: { y: 0.5 } });
+      openAuthModal();
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      localStorage.removeItem("gys_user_session");
+      updateNavAuthState();
+      closeAuthModal();
+      alert("✓ आप सफलतापूर्वक लॉगआउट हो चुके हैं।");
+    }
+
+    function updateNavAuthState() {
+      const btnText = document.getElementById("navLoginText");
+      if (btnText) {
+        if (currentUser && currentUser.role === "superadmin") {
+          btnText.innerText = "👑 सुपर एडमिन";
+        } else if (currentUser && currentUser.role === "member") {
+          btnText.innerText = "👥 सदस्य पोर्टल";
+        } else {
+          btnText.innerText = "पोर्टल लॉगिन";
+        }
+      }
+    }
+
+    function switchAdminTab(tabKey) {
+      const tabs = ["memberCollect", "verifyQueue", "announcementMgr", "expenseManager", "memberRoles"];
+      tabs.forEach(t => {
+        const sec = document.getElementById("section-" + t);
+        const btn = document.getElementById("btnTab-" + t);
+        if (sec) sec.classList.add("hidden");
+        if (btn) btn.className = "px-4 py-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5";
+      });
+
+      const activeSec = document.getElementById("section-" + tabKey);
+      const activeBtn = document.getElementById("btnTab-" + tabKey);
+      if (activeSec) activeSec.classList.remove("hidden");
+      if (activeBtn) activeBtn.className = "px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold shadow-md transition-all cursor-pointer flex items-center space-x-1.5";
+    }
+
+    // Direct Member / Admin Donation (AUTO-VERIFIED, NO APPROVAL REQUIRED)
+    function handleDirectMemberDonation(e) {
+      e.preventDefault();
+      const name = (document.getElementById("dirDonorName") || document.getElementById("memDirName")).value.trim();
+      const amt = (document.getElementById("dirDonorAmt") || document.getElementById("memDirAmt")).value.trim();
+      const collector = currentUser ? currentUser.name : "समिति सदस्य";
+      const recNo = "GYS-REC-2026-" + Math.floor(100 + Math.random()*900);
+
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.5 } });
+      alert("✓ दानदाता '" + name + "' का ₹" + amt + " का प्रत्यक्ष दान (Auto-Verified) सफलतापूर्वक दर्ज हुआ! अधिकृत पावती रसीद जारी कर दी गई है।");
+      viewOfficialVedicReceipt(name, amt, recNo, "DIRECT-CASH-" + Date.now().toString().slice(-6), collector);
+    }
+
+    // Payment Approval Flow (Super Admin for Online Pending Queue)
+    function approveDonation(rowId, name, amt, utr) {
+      const row = document.getElementById(rowId);
+      if (row) row.remove();
+      
+      const pCount = document.getElementById("pendingCount");
+      if (pCount) {
+        let cur = parseInt(pCount.innerText) || 1;
+        pCount.innerText = Math.max(0, cur - 1);
+      }
+
+      confetti({ particleCount: 70, spread: 50, origin: { y: 0.6 } });
+      alert("✓ दानदाता '" + name + "' का ₹" + amt + " का भुगतान सत्यापित हुआ! अब यह मुख्य पृष्ठ एवं दानदाता सूची में प्रदर्शित होगा।");
+      viewOfficialVedicReceipt(name, amt, "GYS-REC-2026-" + Math.floor(100 + Math.random()*900), utr, "ऑनलाइन गेटवे (सत्यापित: सुपर एडमिन)");
+    }
+
+    function rejectDonation(rowId) {
+      if (confirm("क्या आप इस अमान्य/फर्जी प्रविष्टि को निरस्त करना चाहते हैं?")) {
+        const row = document.getElementById(rowId);
+        if (row) row.remove();
+        alert("प्रविष्टि निरस्त कर दी गई है।");
+      }
+    }
+
+    function handleAddNewExpense(e) {
+      e.preventDefault();
+      const head = document.getElementById("expHead").value;
+      const amt = document.getElementById("expAmt").value;
+      const vendor = document.getElementById("expVendor").value;
+      const bill = document.getElementById("expBillNo").value || "VOUCH-" + Math.floor(100+Math.random()*900);
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="p-3 font-bold">${head}</td>
+        <td class="p-3">${vendor}</td>
+        <td class="p-3 font-mono font-bold text-rose-400">₹${Number(amt).toLocaleString('en-IN')}</td>
+        <td class="p-3 font-mono text-slate-400">${bill}</td>
+        <td class="p-3 text-emerald-400 font-bold">सुरेश कुमार (अध्यक्ष)</td>
+      `;
+      document.getElementById("approvedExpensesTable").prepend(tr);
+      alert("✓ नया खर्च ₹" + amt + " सफलतापूर्वक अनुमोदित व दर्ज किया गया!");
+      document.getElementById("expHead").value = "";
+      document.getElementById("expAmt").value = "";
+      document.getElementById("expVendor").value = "";
+    }
+
+    function handleCreateMember(e) {
+      e.preventDefault();
+      const name = document.getElementById("newMemName").value;
+      alert("✓ नया सदस्य '" + name + "' सफलतापूर्वक पंजीकृत हुआ!");
+      document.getElementById("newMemName").value = "";
+      document.getElementById("newMemEmail").value = "";
+    }
+
+    // Official Vedic Receipt Viewer
+    function viewOfficialVedicReceipt(donor, amt, recNo, utr, collector) {
+      document.getElementById("recSlipDonorName").innerText = donor;
+      document.getElementById("recSlipAmount").innerText = "₹" + Number(amt).toLocaleString('en-IN');
+      document.getElementById("recSlipNo").innerText = recNo;
+      document.getElementById("recSlipUTR").innerText = "Ref: " + utr;
+      document.getElementById("recSlipCollector").innerText = collector || "समिति कोषाध्यक्ष मंडल";
+      document.getElementById("recSlipDate").innerText = new Date().toLocaleDateString('en-GB');
+
+      const modal = document.getElementById("receiptModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeReceiptModal() {
+      const modal = document.getElementById("receiptModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+  </script>
+</body>
+</html>
