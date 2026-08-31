@@ -896,6 +896,7 @@
     }
 
     renderDynamicHomeData();
+    window.addEventListener("gys-data-synced", renderDynamicHomeData);
 
     // Slider controls
     let currentSlide = 0;

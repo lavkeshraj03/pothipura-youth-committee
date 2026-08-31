@@ -963,6 +963,10 @@
       modal.classList.add("hidden");
       modal.classList.remove("flex");
     }
+
+    window.addEventListener("gys-data-synced", renderAdminDashboardData);
+    window.addEventListener("gys-pending-synced", renderAdminDashboardData);
+    window.addEventListener("gys-expenses-synced", renderAdminDashboardData);
   </script>
 </body>
 

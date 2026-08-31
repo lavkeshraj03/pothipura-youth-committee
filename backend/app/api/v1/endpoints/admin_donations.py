@@ -217,3 +217,23 @@ async def verify_donation(
         verified_at=donation.verified_at,
         created_at=donation.created_at
     )
+
+@router.delete("/{id}")
+async def delete_donation(
+    id: UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Super Admin deletion of a donation record.
+    """
+    stmt = select(Donation).where(Donation.id == id)
+    res = await db.execute(stmt)
+    donation = res.scalar_one_or_none()
+    if not donation:
+        raise HTTPException(status_code=404, detail="Donation record not found")
+    
+    await db.delete(donation)
+    await db.commit()
+    return {"success": True, "message": "Donation deleted successfully"}
+

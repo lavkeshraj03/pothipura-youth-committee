@@ -5,25 +5,18 @@
  * Live Verified Transparency Ledger, Dynamic Top 4 Hero Donors, and Donors Wall.
  */
 
-// ✅ No demo data — all entries added by admin through the admin panel only
 const DEFAULT_VERIFIED_DONATIONS = [];
 const DEFAULT_PENDING_DONATIONS = [];
 const DEFAULT_EXPENSES = [];
 
 class GYSDataStore {
   constructor() {
-    // Auto-detect API base:
-    // - If running on Render (pyc-backend.onrender.com) or localhost → use relative /api/v1
-    // - If running on Vercel (separate static hosting) → use full Render backend URL
     const hostname = window.location.hostname;
     const isVercel = hostname.includes("vercel.app");
-    const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
     
     if (isVercel) {
-      // ⚠️ Update this URL after your Render deployment is live
       this.apiBase = "https://pyc-backend.onrender.com/api/v1";
     } else {
-      // Localhost dev OR Render (backend serves frontend directly)
       this.apiBase = "/api/v1";
     }
     this.initStore();
@@ -31,7 +24,6 @@ class GYSDataStore {
   }
 
   initStore() {
-    // Only initialize empty storage if not already present, so user additions/changes permanently persist!
     if (localStorage.getItem("gys_verified_donations") === null) {
       localStorage.setItem("gys_verified_donations", JSON.stringify(DEFAULT_VERIFIED_DONATIONS));
     }
@@ -43,18 +35,40 @@ class GYSDataStore {
     }
   }
 
-  // Attempt async sync with FastAPI backend if available
+  // 🔄 Sync from Central Database on load & in background
   async syncFromBackend() {
     try {
-      const res = await fetch(`${this.apiBase}/public/transparency`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data.total_donations_amount) {
-          console.log("[GYS Store] Synced transparency data with backend API");
+      // 1. Sync Verified Donations
+      const donRes = await fetch(`${this.apiBase}/public/donations/all`);
+      if (donRes.ok) {
+        const backendDonations = await donRes.json();
+        if (Array.isArray(backendDonations)) {
+          localStorage.setItem("gys_verified_donations", JSON.stringify(backendDonations));
+          window.dispatchEvent(new CustomEvent("gys-data-synced"));
+        }
+      }
+
+      // 2. Sync Pending Donations (for Admin Queue)
+      const pendRes = await fetch(`${this.apiBase}/public/donations/pending-all`);
+      if (pendRes.ok) {
+        const backendPending = await pendRes.json();
+        if (Array.isArray(backendPending)) {
+          localStorage.setItem("gys_pending_donations", JSON.stringify(backendPending));
+          window.dispatchEvent(new CustomEvent("gys-pending-synced"));
+        }
+      }
+
+      // 3. Sync Expenses
+      const expRes = await fetch(`${this.apiBase}/public/expenses/all`);
+      if (expRes.ok) {
+        const backendExpenses = await expRes.json();
+        if (Array.isArray(backendExpenses)) {
+          localStorage.setItem("gys_expenses", JSON.stringify(backendExpenses));
+          window.dispatchEvent(new CustomEvent("gys-expenses-synced"));
         }
       }
     } catch (err) {
-      // Offline / Static mode active fallback
+      console.warn("[GYS Store] Using cached state while offline/connecting:", err);
     }
   }
 
@@ -96,88 +110,154 @@ class GYSDataStore {
     return list.slice(0, limit);
   }
 
-  // 1. Submit Online Donation (Enters Pending Queue)
-  addOnlineDonation(donor) {
+  // 1. Submit Online Donation (Enters Database + Local Pending Queue)
+  async addOnlineDonation(donor) {
     const pending = this.getPendingDonations();
     const newEntry = {
       id: "PEND-" + Date.now().toString().slice(-4),
       name: donor.name,
-      location: donor.location || "ऑनलाइन दानदाता",
+      location: donor.location || "पोथी का नगला",
       amount: Number(donor.amount),
-      phone: donor.phone,
+      phone: donor.phone || "",
       utr: donor.utr,
       mode: "ऑनलाइन UPI QR",
       date: new Date().toISOString().split('T')[0]
     };
     pending.unshift(newEntry);
     localStorage.setItem("gys_pending_donations", JSON.stringify(pending));
+
+    // Send to central backend database asynchronously
+    try {
+      fetch(`${this.apiBase}/public/donations/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: donor.name,
+          amount: donor.amount,
+          phone: donor.phone,
+          location: donor.location,
+          utr: donor.utr
+        })
+      }).then(r => r.json()).then(data => {
+        if (data && data.id) newEntry.id = data.id;
+      }).catch(e => console.warn("Backend submit fallback:", e));
+    } catch(e) {}
+
     return newEntry;
   }
 
-  // 2. Approve Pending Donation (Moves to Verified, Updates Live Ledger & Frontend)
-  approveDonation(pendingId) {
+  // 2. Approve Pending Donation (Updates Backend Database + Moves to Verified)
+  async approveDonation(pendingId) {
     const pending = this.getPendingDonations();
     const idx = pending.findIndex(p => p.id === pendingId);
-    if (idx === -1) return null;
-
-    const item = pending.splice(idx, 1)[0];
-    localStorage.setItem("gys_pending_donations", JSON.stringify(pending));
+    let item = null;
+    if (idx !== -1) {
+      item = pending.splice(idx, 1)[0];
+      localStorage.setItem("gys_pending_donations", JSON.stringify(pending));
+    }
 
     const verified = this.getVerifiedDonations();
     const verifiedEntry = {
-      id: "GYS-REC-" + Date.now().toString().slice(-4),
-      name: item.name,
-      location: item.location || "ग्राम निवासी",
-      amount: item.amount,
-      phone: item.phone,
-      utr: item.utr,
+      id: "PYC-REC-" + Date.now().toString().slice(-4),
+      name: item ? item.name : "दानदाता",
+      location: item ? item.location : "पोथी का नगला",
+      amount: item ? item.amount : 0,
+      phone: item ? item.phone : "",
+      utr: item ? item.utr : "VERIFIED",
       collector: "ऑनलाइन गेटवे (सत्यापित: सुपर एडमिन)",
       date: new Date().toISOString().split('T')[0],
       verified: true
     };
     verified.unshift(verifiedEntry);
     localStorage.setItem("gys_verified_donations", JSON.stringify(verified));
+
+    // Sync approval to backend database
+    try {
+      fetch(`${this.apiBase}/public/donations/approve`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: pendingId })
+      }).catch(e => console.warn("Backend approve sync error:", e));
+    } catch (e) {}
+
     return verifiedEntry;
   }
 
   // 3. Reject / Delete Pending Donation
-  rejectPendingDonation(pendingId) {
+  async rejectPendingDonation(pendingId) {
     const pending = this.getPendingDonations().filter(p => p.id !== pendingId);
     localStorage.setItem("gys_pending_donations", JSON.stringify(pending));
+
+    try {
+      fetch(`${this.apiBase}/public/donations/delete-any`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: pendingId })
+      }).catch(e => console.warn("Backend delete sync:", e));
+    } catch(e) {}
   }
 
   // 4. Delete Verified Donation (Super Admin Option)
-  deleteVerifiedDonation(donationId) {
+  async deleteVerifiedDonation(donationId) {
     const verified = this.getVerifiedDonations().filter(d => d.id !== donationId);
     localStorage.setItem("gys_verified_donations", JSON.stringify(verified));
+
+    try {
+      fetch(`${this.apiBase}/public/donations/delete-any`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: donationId })
+      }).catch(e => console.warn("Backend delete sync:", e));
+    } catch(e) {}
   }
 
-  // 5. Add Direct Donation by Member / Admin (Auto-Verified, Instantly on Frontend)
-  addDirectDonation(donation) {
+  // 5. Add Direct Donation by Member / Admin (Auto-Verified into Backend DB & Frontend)
+  async addDirectDonation(donation) {
     const verified = this.getVerifiedDonations();
     const newEntry = {
-      id: "GYS-REC-" + Date.now().toString().slice(-4),
+      id: "PYC-REC-" + Date.now().toString().slice(-4),
       name: donation.name,
-      location: donation.location || "ग्राम निवासी",
+      location: donation.location || "पोथी का नगला",
       amount: Number(donation.amount),
-      phone: donation.phone || "अप्रत्यक्ष",
-      utr: donation.utr || "DIRECT-CASH-" + Date.now().toString().slice(-4),
-      collector: donation.collector || "समिति कोषाध्यक्ष मंडल",
+      phone: donation.phone || "",
+      utr: donation.utr || "CASH-" + Date.now().toString().slice(-4),
+      collector: donation.collector || "पोथीपुरा युवा समिति",
+      mode: donation.mode || "नकद (Cash)",
       date: new Date().toISOString().split('T')[0],
       verified: true
     };
     verified.unshift(newEntry);
     localStorage.setItem("gys_verified_donations", JSON.stringify(verified));
+
+    // Post to central backend database so all devices and visitors see it!
+    try {
+      fetch(`${this.apiBase}/public/donations/direct`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: donation.name,
+          amount: donation.amount,
+          location: donation.location,
+          phone: donation.phone,
+          collector: donation.collector,
+          mode: donation.mode,
+          utr: donation.utr
+        })
+      }).then(r => r.json()).then(data => {
+        if (data && data.id) newEntry.id = data.id;
+      }).catch(e => console.warn("Backend direct save:", e));
+    } catch(e) {}
+
     return newEntry;
   }
 
   // 6. Add Expense with 'Member Who Spent' (Super Admin Only)
-  addExpense(expense) {
+  async addExpense(expense) {
     const expenses = this.getExpenses();
     const newEntry = {
       id: "EXP-" + Date.now().toString().slice(-4),
       head: expense.head,
-      member: expense.member,
+      member: expense.member || "पोथीपुरा युवा समिति",
       vendor: expense.vendor || "स्थानीय विक्रेता",
       amount: Number(expense.amount),
       billNo: expense.billNo || "VOUCH-" + Date.now().toString().slice(-3),
@@ -185,13 +265,32 @@ class GYSDataStore {
     };
     expenses.unshift(newEntry);
     localStorage.setItem("gys_expenses", JSON.stringify(expenses));
+
+    try {
+      fetch(`${this.apiBase}/public/expenses/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(expense)
+      }).then(r => r.json()).then(data => {
+        if (data && data.id) newEntry.id = data.id;
+      }).catch(e => console.warn("Backend expense save:", e));
+    } catch(e) {}
+
     return newEntry;
   }
 
   // 7. Delete Expense (Super Admin Option)
-  deleteExpense(expenseId) {
+  async deleteExpense(expenseId) {
     const expenses = this.getExpenses().filter(e => e.id !== expenseId);
     localStorage.setItem("gys_expenses", JSON.stringify(expenses));
+
+    try {
+      fetch(`${this.apiBase}/public/expenses/delete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: expenseId })
+      }).catch(e => console.warn("Backend expense delete:", e));
+    } catch(e) {}
   }
 }
 

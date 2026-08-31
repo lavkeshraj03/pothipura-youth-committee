@@ -174,33 +174,285 @@ async def get_public_donors(db: AsyncSession = Depends(get_db)):
         ))
     return donors_out
 
-@router.get("/transparency", response_model=TransparencySummaryOut)
-async def get_public_transparency(db: AsyncSession = Depends(get_db)):
-    return await transparency_service.get_summary(db)
-
-@router.get("/transparency/expenses", response_model=List[PublicExpenseOut])
-async def get_public_expenses(db: AsyncSession = Depends(get_db)):
+@router.get("/donations/all")
+async def get_all_verified_donations(db: AsyncSession = Depends(get_db)):
+    """
+    Returns full verified donation list with receipts for live public frontend sync.
+    """
     stmt = (
-        select(Expense)
-        .where((Expense.status == "APPROVED") & (Expense.is_public_disclosed == True))
-        .order_by(desc(Expense.expense_date))
+        select(Donation)
+        .where(Donation.status == "VERIFIED")
+        .order_by(desc(Donation.created_at))
     )
     res = await db.execute(stmt)
-    expenses = res.scalars().all()
+    donations = res.scalars().all()
+    results = []
+    for d in donations:
+        receipt_no = d.receipt.receipt_number if d.receipt else f"PYC-{str(d.id)[:6].upper()}"
+        results.append({
+            "id": receipt_no,
+            "name": d.donor.full_name if d.donor else "धर्मप्रेमी दानदाता",
+            "location": d.donor.address if (d.donor and d.donor.address) else "पोथी का नगला",
+            "amount": float(d.amount),
+            "phone": d.donor.mobile if d.donor else "",
+            "utr": d.transaction_ref or "CASH",
+            "collector": d.collected_by.full_name if d.collected_by else "पोथीपुरा युवा समिति",
+            "date": d.created_at.strftime("%Y-%m-%d") if d.created_at else "",
+            "verified": True
+        })
+    return results
 
+@router.get("/donations/pending-all")
+async def get_all_pending_donations(db: AsyncSession = Depends(get_db)):
+    """
+    Returns all pending online donations for the admin verification queue.
+    """
+    stmt = (
+        select(Donation)
+        .where(Donation.status == "PENDING")
+        .order_by(desc(Donation.created_at))
+    )
+    res = await db.execute(stmt)
+    donations = res.scalars().all()
+    results = []
+    for d in donations:
+        results.append({
+            "id": str(d.id),
+            "name": d.donor.full_name if d.donor else "ऑनलाइन दानदाता",
+            "location": d.donor.address if (d.donor and d.donor.address) else "ऑनलाइन",
+            "amount": float(d.amount),
+            "phone": d.donor.mobile if d.donor else "",
+            "utr": d.transaction_ref or "UPI-ONLINE",
+            "mode": "ऑनलाइन UPI QR",
+            "date": d.created_at.strftime("%Y-%m-%d") if d.created_at else ""
+        })
+    return results
+
+@router.post("/donations/approve")
+async def approve_donation_direct(request: Request, db: AsyncSession = Depends(get_db)):
+    """
+    Approves a pending donation, marks it VERIFIED, and generates receipt.
+    """
+    data = await request.json()
+    raw_id = data.get("id")
+    if not raw_id:
+        raise HTTPException(status_code=400, detail="Donation ID is required")
+    
+    # Check if UUID or partial
+    stmt = select(Donation).where(Donation.id == raw_id) if len(str(raw_id)) == 36 else select(Donation)
+    res = await db.execute(stmt)
+    donations = res.scalars().all()
+    
+    donation = None
+    for d in donations:
+        if str(d.id) == str(raw_id) or str(d.id).endswith(str(raw_id)) or str(raw_id) in str(d.id):
+            donation = d
+            break
+            
+    if not donation:
+        raise HTTPException(status_code=404, detail="Donation record not found")
+        
+    donation.status = "VERIFIED"
+    donation.verified_at = datetime.utcnow()
+    await db.flush()
+    
+    if not donation.receipt:
+        await donation_service.create_receipt_for_donation(db, donation)
+        
+    await db.commit()
+    await db.refresh(donation)
+    
+    receipt_no = donation.receipt.receipt_number if donation.receipt else f"PYC-{str(donation.id)[:6].upper()}"
+    return {
+        "success": True,
+        "id": receipt_no,
+        "name": donation.donor.full_name if donation.donor else "दानदाता",
+        "amount": float(donation.amount),
+        "utr": donation.transaction_ref or "VERIFIED-UPI",
+        "collector": "ऑनलाइन गेटवे (सत्यापित: सुपर एडमिन)"
+    }
+
+@router.post("/donations/direct")
+async def add_direct_donation_sync(request: Request, db: AsyncSession = Depends(get_db)):
+    """
+    Adds a verified direct donation (Cash / QR) into the central database.
+    """
+    data = await request.json()
+    name = str(data.get("name", "")).strip()
+    amount_raw = data.get("amount", 0)
+    location = str(data.get("location", "पोथी का नगला")).strip()
+    phone = str(data.get("phone", "")).strip()
+    collector = str(data.get("collector", "पोथीपुरा युवा समिति")).strip()
+    mode = str(data.get("mode", "नकद (Cash)")).strip()
+    utr = str(data.get("utr", "")).strip()
+    
+    if not name or not amount_raw:
+        raise HTTPException(status_code=400, detail="Name and Amount are required")
+        
+    amount = Decimal(str(amount_raw))
+    
+    donor = await donation_service.get_or_create_donor(
+        db=db,
+        full_name=name,
+        mobile=phone or "9800000000",
+        address=location
+    )
+    
+    donation = Donation(
+        donor_id=donor.id,
+        amount=amount,
+        purpose="श्री कृष्ण जन्माष्टमी एवं खेलकूद महोत्सव 2026",
+        payment_method="CASH" if "नकद" in mode or "Cash" in mode else "UPI_ONLINE",
+        transaction_ref=utr or f"CASH-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}",
+        status="VERIFIED",
+        is_anonymous=False,
+        verified_at=datetime.utcnow()
+    )
+    db.add(donation)
+    await db.flush()
+    
+    receipt = await donation_service.create_receipt_for_donation(db, donation)
+    await db.commit()
+    await db.refresh(donation)
+    
+    receipt_no = receipt.receipt_number if receipt else f"PYC-{str(donation.id)[:6].upper()}"
+    return {
+        "success": True,
+        "id": receipt_no,
+        "name": name,
+        "location": location,
+        "amount": float(amount),
+        "phone": phone,
+        "utr": donation.transaction_ref,
+        "collector": collector,
+        "date": donation.created_at.strftime("%Y-%m-%d") if donation.created_at else "",
+        "verified": True
+    }
+
+@router.post("/donations/delete-any")
+async def delete_donation_sync(request: Request, db: AsyncSession = Depends(get_db)):
+    """
+    Deletes any donation by ID from the central database.
+    """
+    data = await request.json()
+    raw_id = data.get("id")
+    if not raw_id:
+        raise HTTPException(status_code=400, detail="ID is required")
+        
+    stmt = select(Donation)
+    res = await db.execute(stmt)
+    donations = res.scalars().all()
+    
+    target = None
+    for d in donations:
+        r_num = d.receipt.receipt_number if d.receipt else ""
+        if str(d.id) == str(raw_id) or str(d.id).endswith(str(raw_id)) or r_num == str(raw_id):
+            target = d
+            break
+            
+    if target:
+        await db.delete(target)
+        await db.commit()
+        return {"success": True, "message": "Donation deleted from database"}
+    return {"success": False, "message": "Not found in database, cleared from cache"}
+
+@router.get("/expenses/all")
+async def get_all_expenses_sync(db: AsyncSession = Depends(get_db)):
+    """
+    Returns all approved expenses for transparency sync.
+    """
+    stmt = select(Expense).order_by(desc(Expense.created_at))
+    res = await db.execute(stmt)
+    expenses = res.scalars().all()
     results = []
     for exp in expenses:
-        results.append(PublicExpenseOut(
-            id=exp.id,
-            category_name_hi=exp.category.name_hi,
-            category_name_en=exp.category.name_en,
-            amount=exp.amount,
-            description=exp.description,
-            committee_member_name=exp.committee_member.full_name if exp.committee_member else None,
-            expense_date=exp.expense_date,
-            event_title=exp.event.title_hi if exp.event else None
-        ))
+        results.append({
+            "id": f"EXP-{str(exp.id)[:6].upper()}",
+            "head": exp.description or (exp.category.name_hi if exp.category else "महोत्सव व्यवस्था व्यय"),
+            "member": exp.committee_member.full_name if exp.committee_member else "पोथीपुरा युवा समिति",
+            "vendor": exp.vendor_name or "स्थानीय आपूर्तिकर्ता",
+            "amount": float(exp.amount),
+            "billNo": exp.bill_number or "VOUCH",
+            "date": exp.expense_date.strftime("%Y-%m-%d") if exp.expense_date else ""
+        })
     return results
+
+@router.post("/expenses/add")
+async def add_expense_sync(request: Request, db: AsyncSession = Depends(get_db)):
+    """
+    Adds an expense into the central database.
+    """
+    data = await request.json()
+    head = str(data.get("head", "")).strip()
+    amount_raw = data.get("amount", 0)
+    member = str(data.get("member", "पोथीपुरा युवा समिति")).strip()
+    vendor = str(data.get("vendor", "स्थानीय आपूर्तिकर्ता")).strip()
+    billNo = str(data.get("billNo", "VOUCH")).strip()
+    
+    if not head or not amount_raw:
+        raise HTTPException(status_code=400, detail="Head and Amount are required")
+        
+    amount = Decimal(str(amount_raw))
+    
+    # Default category
+    cat_stmt = select(ExpenseCategory).limit(1)
+    cat_res = await db.execute(cat_stmt)
+    cat = cat_res.scalar_one_or_none()
+    
+    expense = Expense(
+        category_id=cat.id if cat else None,
+        amount=amount,
+        description=head,
+        vendor_name=vendor,
+        bill_number=billNo,
+        expense_date=datetime.utcnow(),
+        payment_method="CASH",
+        status="APPROVED",
+        is_public_disclosed=True
+    )
+    db.add(expense)
+    await db.commit()
+    await db.refresh(expense)
+    
+    return {
+        "success": True,
+        "id": f"EXP-{str(expense.id)[:6].upper()}",
+        "head": head,
+        "member": member,
+        "vendor": vendor,
+        "amount": float(amount),
+        "billNo": billNo,
+        "date": expense.created_at.strftime("%Y-%m-%d") if expense.created_at else ""
+    }
+
+@router.post("/expenses/delete")
+async def delete_expense_sync(request: Request, db: AsyncSession = Depends(get_db)):
+    """
+    Deletes an expense from the central database.
+    """
+    data = await request.json()
+    raw_id = data.get("id")
+    if not raw_id:
+        raise HTTPException(status_code=400, detail="ID is required")
+        
+    stmt = select(Expense)
+    res = await db.execute(stmt)
+    expenses = res.scalars().all()
+    
+    target = None
+    for e in expenses:
+        exp_code = f"EXP-{str(e.id)[:6].upper()}"
+        if str(e.id) == str(raw_id) or str(e.id).endswith(str(raw_id)) or exp_code == str(raw_id):
+            target = e
+            break
+            
+    if target:
+        await db.delete(target)
+        await db.commit()
+        return {"success": True, "message": "Expense deleted"}
+    return {"success": False, "message": "Not found in database"}
+
+
 
 @router.post("/donations/initiate", response_model=DonationInitiateResponse)
 async def initiate_donation(req: DonationInitiateRequest, db: AsyncSession = Depends(get_db)):

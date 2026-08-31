@@ -314,6 +314,8 @@
     }
 
     renderTransparencyLedger();
+    window.addEventListener("gys-data-synced", renderTransparencyLedger);
+    window.addEventListener("gys-expenses-synced", renderTransparencyLedger);
   </script>
 
   <!-- Public Footer (No Public Admin Login Links) -->
