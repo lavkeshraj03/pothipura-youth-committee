@@ -877,21 +877,28 @@
       const topContainer = document.getElementById("dynamicHeroTopDonors");
       if (topContainer) {
         topContainer.innerHTML = "";
-        const badges = ["✓ दान समर्पण", "✓ दान समर्पण", "✓ दान समर्पण", "✓ दान समर्पण"];
-        top4.forEach((d, idx) => {
-          const card = document.createElement("div");
-          card.className = "p-3.5 rounded-2xl bg-slate-950/90 border border-amber-400/60 shadow-xl backdrop-blur-md relative overflow-hidden";
-          card.innerHTML = `
-            <div class="text-[10px] font-black text-amber-400 flex items-center justify-between">
-              <span>${badges[idx] || "✓ दान समर्पण"}</span>
-              <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px]">सत्यापित</span>
+        if (!top4 || top4.length === 0) {
+          topContainer.innerHTML = `
+            <div class="col-span-2 sm:col-span-4 p-4 rounded-xl bg-slate-950/80 border border-amber-500/30 text-center text-xs text-amber-200/90 font-hindi">
+              🌸 अभी कोई दानदाता प्रविष्टि नहीं है। दान समर्पित करने वाले प्रथम दानदाता बनें!
             </div>
-            <div class="text-xs sm:text-sm font-bold text-white mt-1 truncate">${d.name}</div>
-            <div class="text-[11px] text-slate-400 truncate">${d.location || "पोथी का नगला"}</div>
-            <div class="text-base sm:text-lg font-black text-emerald-400 font-mono mt-1">₹${Number(d.amount).toLocaleString('en-IN')}</div>
           `;
-          topContainer.appendChild(card);
-        });
+        } else {
+          top4.forEach((d, idx) => {
+            const card = document.createElement("div");
+            card.className = "p-3.5 rounded-2xl bg-slate-950/90 border border-amber-400/60 shadow-xl backdrop-blur-md relative overflow-hidden";
+            card.innerHTML = `
+              <div class="text-[10px] font-black text-amber-400 flex items-center justify-between">
+                <span>✓ दान समर्पण</span>
+                <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px]">सत्यापित</span>
+              </div>
+              <div class="text-xs sm:text-sm font-bold text-white mt-1 truncate">${d.name}</div>
+              <div class="text-[11px] text-slate-400 truncate">${d.location || "पोथी का नगला"}</div>
+              <div class="text-base sm:text-lg font-black text-emerald-400 font-mono mt-1">₹${Number(d.amount).toLocaleString('en-IN')}</div>
+            `;
+            topContainer.appendChild(card);
+          });
+        }
       }
     }
 

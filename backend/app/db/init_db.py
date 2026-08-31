@@ -185,19 +185,8 @@ async def init_db():
                 expense_categories.append(c)
             await db.flush()
 
-            # 8. Initial Verified Sample Donations (To give life to transparency meter)
-            donors_data = [
-                ("चौधरी हनुमान राम जी", "9828011111", 51000.0, "JANMASHTAMI", False),
-                ("सेठ बंशीधर अग्रवाल", "9828022222", 31000.0, "JANMASHTAMI", False),
-                ("गुप्त दानदाता (श्री श्याम भक्त)", "9828033333", 21000.0, "JANMASHTAMI", True),
-                ("ठाकुर भवानी सिंह", "9828044444", 25000.0, "JANMASHTAMI", False),
-                ("मास्टर जगदीश प्रसाद शर्मा", "9828055555", 11000.0, "EDUCATION", False),
-                ("ग्राम युवा प्रवासी मंडल (सूरत)", "9828066666", 51000.0, "JANMASHTAMI", False),
-                ("कैलाश चन्द कुमावत", "9828077777", 15000.0, "JANMASHTAMI", False),
-                ("गुप्त दानदाता", "9828088888", 5100.0, "COMMUNITY", True),
-                ("दिनेश कुमार टेलर", "9828099999", 11000.0, "JANMASHTAMI", False),
-                ("महेन्द्र सिंह राठौड़", "9828000000", 21000.0, "JANMASHTAMI", False)
-            ]
+            # 8. Initial Verified Donations (Empty by default — all donor data comes from Admin Portal)
+            donors_data = []
             for d_name, d_mob, d_amt, d_purp, is_anon in donors_data:
                 donor = Donor(
                     full_name=d_name,
@@ -225,14 +214,8 @@ async def init_db():
                 # Generate Official Receipt
                 await donation_service.create_receipt_for_donation(db, don)
 
-            # 9. Initial Approved Expenses
-            expenses_seed = [
-                (expense_categories[0], 35000.0, "मंदिर प्रांगण व मुख्य द्वार पर भव्य फूलों एवं गुब्बारों का शृंगार", comm_members[0], "श्री श्याम फ्लोरिस्ट", "CASH"),
-                (expense_categories[2], 28000.0, "साउंड सिस्टम, डिजिटल एल.ई.डी. वॉल एवं मुख्य स्टेज लाइटिंग अग्रिम", comm_members[1], "रॉयल साउंड एंड डीजे", "UPI"),
-                (expense_categories[3], 42000.0, "वाटरप्रूफ जर्मन हैंगर टेंट, कालीन व 1000 कुर्सियों की व्यवस्था", comm_members[2], "बालाजी टेंट हाउस", "BANK_TRANSFER"),
-                (expense_categories[6], 12500.0, "पूजा सामग्री, पंचामृत, हवन सामग्री व 108 दीपक", comm_members[3], "श्री कृष्ण पूजन भंडार", "CASH"),
-                (expense_categories[5], 6500.0, "महोत्सव आमंत्रण पत्रिका, बैनर एवं 20 बड़े होर्डिंग्स छपाई", comm_members[0], "महालक्ष्मी प्रिंटर्स", "UPI")
-            ]
+            # 9. Initial Approved Expenses (Empty by default — all expenses come from Admin Portal)
+            expenses_seed = []
             for cat, amt, desc, member, vendor, pay_m in expenses_seed:
                 db.add(Expense(
                     event_id=janmashtami_event.id,
