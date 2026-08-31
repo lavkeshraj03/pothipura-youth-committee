@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "name": "pothipura-youth-committee",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "outputDirectory": "backend/app/static/frontend",
+  "rewrites": [
+    { "source": "/janmashtami", "destination": "/backend/app/static/frontend/janmashtami.html" },
+    { "source": "/sports", "destination": "/backend/app/static/frontend/sports.html" },
+    { "source": "/transparency", "destination": "/backend/app/static/frontend/transparency.html" },
+    { "source": "/donors", "destination": "/backend/app/static/frontend/donors.html" },
+    { "source": "/donate", "destination": "/backend/app/static/frontend/donate.html" },
+    { "source": "/committee", "destination": "/backend/app/static/frontend/committee.html" },
+    { "source": "/schedule", "destination": "/backend/app/static/frontend/schedule.html" },
+    { "source": "/admin-login", "destination": "/backend/app/static/frontend/admin-login.html" },
+    { "source": "/admin", "destination": "/backend/app/static/frontend/admin-login.html" }
+  ]
+}
