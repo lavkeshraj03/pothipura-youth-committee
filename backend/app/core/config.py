@@ -24,12 +24,17 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str = os.getenv("FIRST_SUPERUSER_PASSWORD", "Admin@123")
     FIRST_SUPERUSER_NAME: str = "मुख्य व्यवस्थापक (Super Admin)"
     
-    # CORS
+    # CORS — dev + production origins
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
         "http://127.0.0.1:8000",
+        # Production Vercel frontend
+        "https://pothipura-youth-committee.vercel.app",
+        "https://*.vercel.app",
+        # Production Render (will auto-match if same service)
+        "https://pyc-backend.onrender.com",
     ]
     
     class Config:
