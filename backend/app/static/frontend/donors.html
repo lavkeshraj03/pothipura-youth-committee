@@ -220,10 +220,10 @@
       <div class="text-center max-w-3xl mx-auto">
         <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-300 text-xs font-bold mb-3 font-hindi">
           <i data-lucide="heart" class="w-4 h-4 text-rose-400 fill-rose-400"></i>
-          <span>भामाशाह एवं दानदाता सम्मान पट्टिका 2026</span>
+          <span>सम्मानित दानदाता पट्टिका 2026</span>
         </div>
         <h1 class="text-3xl sm:text-5xl font-black text-white font-festival">
-          सम्मानित दानदाता सूची (Verified Honor Wall)
+          सम्मानित दानदाता सूची (Verified Donors List)
         </h1>
         <p class="text-xs sm:text-sm text-slate-300 font-hindi mt-2">
           भगवान श्री कृष्ण जन्माष्टमी एवं खेलकूद महोत्सव में समर्पित समस्त 100% सत्यापित दानों का अधिकृत विवरण।
@@ -244,36 +244,19 @@
         </div>
       </div>
 
-      <!-- Categories Container -->
-      <div class="space-y-8 font-hindi">
-        
-        <!-- Bhamashah Tier: 21,000+ -->
-        <div>
-          <div class="flex items-center space-x-2 mb-4">
-            <span class="text-2xl">👑</span>
-            <h3 class="text-xl font-black text-amber-400">मुख्य भामाशाह संरक्षक (₹21,000 और अधिक)</h3>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="tierBhamashahGrid"></div>
-        </div>
-
-        <!-- Tier 2: 11,000 - 20,999 -->
-        <div>
-          <div class="flex items-center space-x-2 mb-4">
-            <span class="text-2xl">🌟</span>
-            <h3 class="text-xl font-black text-yellow-400">विशिष्ट दानदाता बंधु (₹11,000 - ₹20,999)</h3>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="tierDistinguishedGrid"></div>
-        </div>
-
-        <!-- Tier 3: Below 11,000 -->
-        <div>
-          <div class="flex items-center space-x-2 mb-4">
+      <!-- Unified Donors List (No Tiers / No Criteria) -->
+      <div class="space-y-4 font-hindi">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
             <span class="text-2xl">🪷</span>
-            <h3 class="text-xl font-black text-slate-200">धर्मप्रेमी दानदाता (₹10,999 तक)</h3>
+            <h3 class="text-xl font-black text-amber-400">समस्त सत्यापित दानदाता (All Verified Donors)</h3>
           </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="tierGeneralGrid"></div>
         </div>
-
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="allDonorsGrid"></div>
+        <div id="noDonorsNotice" class="hidden text-center p-12 vedic-card border-slate-800 text-slate-400 text-sm">
+          कोई दानदाता प्रविष्टि नहीं मिली।
+        </div>
       </div>
 
     </div>
@@ -287,39 +270,35 @@
       document.getElementById("wallDonorCount").innerText = metrics.donorCount + " दानदाता";
 
       const list = window.gysStore.getVerifiedDonations();
-      const grid1 = document.getElementById("tierBhamashahGrid");
-      const grid2 = document.getElementById("tierDistinguishedGrid");
-      const grid3 = document.getElementById("tierGeneralGrid");
-      grid1.innerHTML = "";
-      grid2.innerHTML = "";
-      grid3.innerHTML = "";
+      const grid = document.getElementById("allDonorsGrid");
+      const emptyNotice = document.getElementById("noDonorsNotice");
+      grid.innerHTML = "";
 
-      list.forEach(d => {
+      if (!list || list.length === 0) {
+        if (emptyNotice) emptyNotice.classList.remove("hidden");
+        return;
+      }
+      if (emptyNotice) emptyNotice.classList.add("hidden");
+
+      list.forEach((d, idx) => {
         const amt = Number(d.amount);
         const card = document.createElement("div");
-        card.className = "vedic-card p-4 border-2 border-amber-400/80 donor-card";
+        card.className = "vedic-card p-4 border border-amber-500/40 hover:border-amber-400 transition-all donor-card";
         card.innerHTML = `
-          <div class="flex justify-between items-start">
-            <span class="px-2 py-0.5 rounded ${amt >= 21000 ? 'bg-amber-500 text-slate-950' : amt >= 11000 ? 'bg-yellow-500/20 text-yellow-300' : 'bg-slate-800 text-slate-300'} font-black text-[10px]">
-              ${amt >= 21000 ? 'शीर्ष भामाशाह' : amt >= 11000 ? 'विशिष्ट दान' : 'धर्मप्रेमी'}
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold text-[10px]">
+              दान समर्पण
             </span>
             <span class="text-xs font-mono text-emerald-400">✓ सत्यापित</span>
           </div>
           <h4 class="text-sm sm:text-base font-bold text-white mt-2 donor-name">${d.name}</h4>
-          <p class="text-xs text-slate-400 donor-loc">${d.location || 'ग्राम निवासी'}</p>
+          <p class="text-xs text-slate-400 donor-loc">${d.location || 'पोथी का नगला'}</p>
           <div class="text-lg sm:text-xl font-black text-emerald-400 font-mono mt-2">₹${amt.toLocaleString('en-IN')}</div>
-          <button onclick="viewOfficialVedicReceipt('${d.name}', ${amt}, '${d.id}', '${d.utr}', '${d.collector || "कोषाध्यक्ष"}')" class="mt-3 w-full py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-[11px] transition-all cursor-pointer">
+          <button onclick="viewOfficialVedicReceipt('${d.name}', ${amt}, '${d.id}', '${d.utr}', '${d.collector || "पोथीपुरा युवा समिति"}')" class="mt-3 w-full py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-[11px] transition-all cursor-pointer">
             पावती रसीद देखें
           </button>
         `;
-
-        if (amt >= 21000) {
-          grid1.appendChild(card);
-        } else if (amt >= 11000) {
-          grid2.appendChild(card);
-        } else {
-          grid3.appendChild(card);
-        }
+        grid.appendChild(card);
       });
     }
 

@@ -414,17 +414,17 @@
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-8 sm:py-12 w-full">
             <div class="max-w-4xl space-y-3.5 sm:space-y-4">
               <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-rose-500/25 border border-rose-400/50 text-rose-300 text-xs sm:text-sm font-bold backdrop-blur-md shadow-lg">
-                <span>💖 शीर्ष 4 भामाशाह सम्मान</span>
+                <span>💖 सम्मानित दानदाता</span>
                 <span class="text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black" id="heroTotalDonationsBadge">कुल सत्यापित दान: ₹0</span>
               </div>
               <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white font-festival tracking-wide leading-tight drop-shadow-2xl">
-                <span class="gold-gradient-text block">शीर्ष भामाशाह एवं दानदाता</span>
+                <span class="gold-gradient-text block">सम्मानित दानदाता बंधु</span>
                 <span class="text-lg sm:text-2xl font-bold text-amber-200 block font-hindi mt-1">
                   पोथीपुरा युवा समिति को आपके अमूल्य दान को नमन
                 </span>
               </h2>
               <p class="text-xs sm:text-sm text-slate-100 font-hindi max-w-2xl leading-relaxed drop-shadow">
-                पोथीपुरा के शीर्ष भामाशाहों के पावन दान सहयोग से महोत्सव की भव्य तैयारियां निरंतर प्रगति पर हैं।
+                समस्त दानदाताओं के पावन सहयोग से महोत्सव की भव्य तैयारियां निरंतर प्रगति पर हैं।
               </p>
 
               <!-- TOP 4 VERIFIED DONORS GRID -->
@@ -877,17 +877,17 @@
       const topContainer = document.getElementById("dynamicHeroTopDonors");
       if (topContainer) {
         topContainer.innerHTML = "";
-        const badges = ["🥇 शीर्ष #1", "🥈 शीर्ष #2", "🥉 शीर्ष #3", "🏅 शीर्ष #4"];
+        const badges = ["✓ दान समर्पण", "✓ दान समर्पण", "✓ दान समर्पण", "✓ दान समर्पण"];
         top4.forEach((d, idx) => {
           const card = document.createElement("div");
-          card.className = "p-3.5 rounded-2xl bg-slate-950/90 border-2 border-amber-400/80 shadow-xl backdrop-blur-md relative overflow-hidden";
+          card.className = "p-3.5 rounded-2xl bg-slate-950/90 border border-amber-400/60 shadow-xl backdrop-blur-md relative overflow-hidden";
           card.innerHTML = `
             <div class="text-[10px] font-black text-amber-400 flex items-center justify-between">
-              <span>${badges[idx] || "🏅 भामाशाह"}</span>
+              <span>${badges[idx] || "✓ दान समर्पण"}</span>
               <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px]">सत्यापित</span>
             </div>
             <div class="text-xs sm:text-sm font-bold text-white mt-1 truncate">${d.name}</div>
-            <div class="text-[11px] text-slate-400 truncate">${d.location || "पोथीपुरा"}</div>
+            <div class="text-[11px] text-slate-400 truncate">${d.location || "पोथी का नगला"}</div>
             <div class="text-base sm:text-lg font-black text-emerald-400 font-mono mt-1">₹${Number(d.amount).toLocaleString('en-IN')}</div>
           `;
           topContainer.appendChild(card);
