@@ -72,12 +72,10 @@ async def init_db():
 
             # 4. Committee Members
             members_seed = [
-                ("रमेश चन्द्र शर्मा", "9829012345", "ramesh@villageyouth.org", designations[0], 1, "ग्राम युवा समिति के सक्रिय अध्यक्ष, पिछले 8 वर्षों से ग्राम विकास एवं सांस्कृतिक आयोजनों के सूत्रधार।"),
-                ("सुरेश सिंह राठौड़", "9829023456", "suresh@villageyouth.org", designations[1], 2, "सामाजिक सरोकारों में अग्रणी, ग्राम सुरक्षा एवं खेलकूद गतिविधियों के संयोजक।"),
-                ("विकास कुमावत", "9829034567", "vikas@villageyouth.org", designations[2], 3, "समिति के संगठनात्मक कार्यों व जनसंपर्क के मुख्य संचालक।"),
-                ("राकेश कुमार वर्मा", "9829045678", "rakesh@villageyouth.org", designations[4], 4, "समिति का वित्तीय प्रबंधन एवं संपूर्ण दान/व्यय पारदर्शिता के उत्तरदायी।"),
-                ("अमित जांगिड़", "9829056789", "amit@villageyouth.org", designations[6], 5, "जन्माष्टमी व सांस्कृतिक कार्यक्रमों के कुशल मंच संचालक व व्यवस्थापक।"),
-                ("दीपक प्रजापत", "9829067890", "deepak@villageyouth.org", designations[7], 6, "वेबसाइट, सोशल मीडिया एवं पोस्टर प्रचार-प्रसार व्यवस्थापक।")
+                ("राजेश", "9023970783", "rajesh@pothipurayouth.org", designations[0], 1, "पोथीपुरा युवा समिति के सक्रिय सदस्य, ग्राम विकास एवं सांस्कृतिक आयोजनों के मुख्य सूत्रधार।"),
+                ("आकाश", "9829012345", "aakash@pothipurayouth.org", designations[1], 2, "सामाजिक सरोकारों में अग्रणी, ग्राम सुरक्षा एवं खेलकूद गतिविधियों के संयोजक।"),
+                ("नरेश", "9829023456", "naresh@pothipurayouth.org", designations[2], 3, "समिति के संगठनात्मक कार्यों व जनसंपर्क के मुख्य संचालक।"),
+                ("तिलक", "9829034567", "tilak@pothipurayouth.org", designations[4], 4, "समिति का वित्तीय प्रबंधन एवं संपूर्ण दान/व्यय पारदर्शिता के उत्तरदायी।"),
             ]
             comm_members = []
             for name, mob, em, desig, order, bio in members_seed:
@@ -101,11 +99,11 @@ async def init_db():
                 title_hi="श्री कृष्ण जन्माष्टमी महोत्सव 2026",
                 title_en="Shree Krishna Janmashtami Mahotsav 2026",
                 event_type="RELIGIOUS",
-                description_hi="समस्त ग्रामवासियों एवं युवा शक्ति के सहयोग से 4 सितम्बर को भव्य श्री कृष्ण जन्माष्टमी महोत्सव, भजन संध्या, मटकी फोड़ प्रतियोगिता एवं महाप्रसाद का विराट आयोजन।",
+                description_hi="समस्त पोथीपुरा ग्रामवासियों एवं युवा शक्ति के सहयोग से 4 सितम्बर को भव्य श्री कृष्ण जन्माष्टमी महोत्सव, भजन संध्या, मटकी फोड़ प्रतियोगिता एवं महाप्रसाद का विराट आयोजन।",
                 description_en="Grand celebration of Krishna Janmashtami on 4 September featuring Bhajan Sandhya, Matki Phod, cultural dramas, and Mahaprasad.",
                 start_date=datetime(2026, 9, 4, 6, 0, 0),
                 end_date=datetime(2026, 9, 5, 2, 0, 0),
-                venue="श्री राधा कृष्ण मंदिर प्रांगण, मुख्य चौक, ग्राम",
+                venue="श्री राधा कृष्ण मंदिर, पोथी का नगला (पोथीपुरा)",
                 target_donation_amount=Decimal("500000.00"),
                 status="UPCOMING",
                 is_featured=True

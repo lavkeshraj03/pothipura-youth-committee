@@ -92,8 +92,8 @@ class ReceiptService:
         )
 
         # Header Section
-        elements.append(Paragraph("<b>ग्राम युवा समिति (Village Youth Committee)</b>", title_style))
-        elements.append(Paragraph("श्री कृष्ण जन्माष्टमी महोत्सव एवं ग्राम उत्थान सहयोग रसीद", subtitle_style))
+        elements.append(Paragraph("<b>पोथीपुरा युवा समिति (Pothipura Youth Committee)</b>", title_style))
+        elements.append(Paragraph("श्री राधा कृष्ण मंदिर, पोथी का नगला (पोथीपुरा) • श्री कृष्ण जन्माष्टमी एवं खेलकूद महोत्सव 2026", subtitle_style))
         elements.append(Spacer(1, 4 * mm))
 
         # Receipt Number & Date Banner
@@ -117,7 +117,7 @@ class ReceiptService:
         elements.append(Spacer(1, 4 * mm))
 
         # QR Code for Verification
-        qr_data = f"https://villageyouth.org/verify-receipt/{download_hash}"
+        qr_data = f"https://pothipura-youth-committee.vercel.app/transparency"
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -140,7 +140,7 @@ class ReceiptService:
             [Paragraph("Amount / सहयोग राशि:", label_style), Paragraph(f"₹ {amount:,.2f} /-", amount_style), ""],
             [Paragraph("Purpose / उद्देश्य:", label_style), Paragraph(f"{purpose.upper()}", val_style), ""],
             [Paragraph("Payment Mode / माध्यम:", label_style), Paragraph(f"{payment_method.replace('_', ' ')} (Ref: {transaction_ref or 'Verified Cash'})", val_style), ""],
-            [Paragraph("Status / स्थिति:", label_style), Paragraph("<b>✓ VERIFIED & RECORDED IN OFFICIAL LEDGER</b>", val_style), ""],
+            [Paragraph("Status / स्थिति:", label_style), Paragraph("<b>✓ 100% VERIFIED & RECORDED IN OFFICIAL LEDGER</b>", val_style), ""],
         ]
 
         table = Table(details_data, colWidths=[45 * mm, 95 * mm, 30 * mm])
@@ -157,8 +157,8 @@ class ReceiptService:
         # Footer Signatures & Note
         footer_data = [
             [
-                Paragraph("<i>धन्यवाद! आपका सहयोग ग्राम संस्कृति एवं विकास हेतु अमूल्य है।<br/>(This is a computer generated valid digital receipt)</i>", ParagraphStyle('F', fontSize=7.5, leading=9, textColor=colors.HexColor('#6B7280'))),
-                Paragraph("<b>अधिकृत हस्ताक्षरकर्ता</b><br/>कोषाध्यक्ष / अध्यक्ष, ग्राम युवा समिति", ParagraphStyle('FS', fontSize=8, leading=10, alignment=2, textColor=colors.HexColor('#0B1D3A')))
+                Paragraph("<i>धन्यवाद! आपका सहयोग पोथीपुरा ग्राम संस्कृति एवं महोत्सव आयोजन हेतु अमूल्य है।<br/>(Official Valid Digital Receipt • पोथी का नगला)</i>", ParagraphStyle('F', fontSize=7.5, leading=9, textColor=colors.HexColor('#6B7280'))),
+                Paragraph("<b>अधिकृत हस्ताक्षरकर्ता</b><br/>राजेश (कोषाध्यक्ष) / आकाश (अध्यक्ष)<br/>पोथीपुरा युवा समिति", ParagraphStyle('FS', fontSize=8, leading=10, alignment=2, textColor=colors.HexColor('#0B1D3A')))
             ]
         ]
         footer_table = Table(footer_data, colWidths=[110 * mm, 60 * mm])

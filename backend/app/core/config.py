@@ -3,8 +3,8 @@ from typing import List
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Village Youth Committee Platform"
-    PROJECT_HINDI_NAME: str = "ग्राम युवा समिति मंच"
+    PROJECT_NAME: str = "Pothipura Youth Committee Platform"
+    PROJECT_HINDI_NAME: str = "पोथीपुरा युवा समिति मंच"
     API_V1_STR: str = "/api/v1"
     
     # Secret Key for JWT
@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     # Admin Credentials for Seeding
     FIRST_SUPERUSER_EMAIL: str = os.getenv("FIRST_SUPERUSER_EMAIL", "admin@villageyouth.org")
     FIRST_SUPERUSER_PASSWORD: str = os.getenv("FIRST_SUPERUSER_PASSWORD", "Admin@123")
-    FIRST_SUPERUSER_NAME: str = "मुख्य व्यवस्थापक (Super Admin)"
+    FIRST_SUPERUSER_NAME: str = "पोथीपुरा युवा समिति (Super Admin)"
     
     # CORS — dev + production origins
     BACKEND_CORS_ORIGINS: List[str] = [
