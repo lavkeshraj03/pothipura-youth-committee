@@ -31,10 +31,16 @@ class GYSDataStore {
   }
 
   initStore() {
-    // Always reset to current defaults (clears any previously cached demo data)
-    localStorage.setItem("gys_verified_donations", JSON.stringify(DEFAULT_VERIFIED_DONATIONS));
-    localStorage.setItem("gys_pending_donations", JSON.stringify(DEFAULT_PENDING_DONATIONS));
-    localStorage.setItem("gys_expenses", JSON.stringify(DEFAULT_EXPENSES));
+    // Only initialize empty storage if not already present, so user additions/changes permanently persist!
+    if (localStorage.getItem("gys_verified_donations") === null) {
+      localStorage.setItem("gys_verified_donations", JSON.stringify(DEFAULT_VERIFIED_DONATIONS));
+    }
+    if (localStorage.getItem("gys_pending_donations") === null) {
+      localStorage.setItem("gys_pending_donations", JSON.stringify(DEFAULT_PENDING_DONATIONS));
+    }
+    if (localStorage.getItem("gys_expenses") === null) {
+      localStorage.setItem("gys_expenses", JSON.stringify(DEFAULT_EXPENSES));
+    }
   }
 
   // Attempt async sync with FastAPI backend if available
